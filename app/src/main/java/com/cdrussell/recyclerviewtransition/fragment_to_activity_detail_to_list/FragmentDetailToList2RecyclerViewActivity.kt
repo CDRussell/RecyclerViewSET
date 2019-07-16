@@ -1,5 +1,7 @@
 package com.cdrussell.recyclerviewtransition.com.cdrussell.recyclerviewtransition.fragment_to_activity_detail_to_list
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +25,14 @@ class FragmentDetailToList2RecyclerViewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_to_activity_2_recycler_view)
 
         findViewById<RecyclerView>(R.id.recyclerView).also {
-            val adapter = SampleAdapter()
+            val adapter = SampleAdapter(object :ClickListener {
+                override fun onClicked(value: String) {
+                    val returnIntent = Intent()
+                    returnIntent.putExtra("selected", value)
+                    setResult(Activity.RESULT_OK, returnIntent)
+                    finishAfterTransition()
+                }
+            })
             it.adapter = adapter
 
             val index = adapter.adapterPositionForItem(intent.getStringExtra("selected"))
@@ -43,7 +52,11 @@ class FragmentDetailToList2RecyclerViewActivity : AppCompatActivity() {
     }
 }
 
-private class SampleAdapter : RecyclerView.Adapter<SampleAdapter.ViewHolder>() {
+interface ClickListener {
+    fun onClicked(value: String)
+}
+
+private class SampleAdapter(val clickListener: ClickListener) : RecyclerView.Adapter<SampleAdapter.ViewHolder>() {
 
     data class ViewHolder(val rootView: View, val title: TextView, val sharedImage: ImageView) : RecyclerView.ViewHolder(rootView)
 
@@ -61,6 +74,8 @@ private class SampleAdapter : RecyclerView.Adapter<SampleAdapter.ViewHolder>() {
         holder.title.text = item
 
         ViewCompat.setTransitionName(holder.sharedImage, item)
+
+        holder.rootView.setOnClickListener { clickListener.onClicked(item) }
     }
 
     fun adapterPositionForItem(value: String): Int {

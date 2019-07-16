@@ -1,5 +1,7 @@
 package com.cdrussell.recyclerviewtransition.activity_to_activity_detail_to_list
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,17 +25,21 @@ class DetailToList2RecyclerViewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_to_activity_2_recycler_view)
 
         findViewById<RecyclerView>(R.id.recyclerView).also {
-            val adapter = SampleAdapter()
+            val adapter = SampleAdapter(object: SampleAdapter.AdapterClickListener {
+                override fun onItemSelected(value: String) {
+                    val returnIntent = Intent()
+                    returnIntent.putExtra("selected", "value")
+                    setResult(Activity.RESULT_OK, returnIntent)
+                }
+            })
             it.adapter = adapter
 
             val index = adapter.adapterPositionForItem(intent.getStringExtra("selected"))
             it.layoutManager?.scrollToPosition(index)
 
             it.doOnPreDraw {recycler ->
-
                 Timber.i("onPreDraw... triggering animation")
                 startPostponedEnterTransition()
-
             }
         }
     }
@@ -43,9 +49,13 @@ class DetailToList2RecyclerViewActivity : AppCompatActivity() {
     }
 }
 
-private class SampleAdapter : RecyclerView.Adapter<SampleAdapter.ViewHolder>() {
+private class SampleAdapter(val clickListener: AdapterClickListener) : RecyclerView.Adapter<SampleAdapter.ViewHolder>() {
 
     data class ViewHolder(val rootView: View, val title: TextView, val sharedImage: ImageView) : RecyclerView.ViewHolder(rootView)
+
+    interface AdapterClickListener {
+        fun onItemSelected(value: String)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val root = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
@@ -61,6 +71,11 @@ private class SampleAdapter : RecyclerView.Adapter<SampleAdapter.ViewHolder>() {
         holder.title.text = item
 
         ViewCompat.setTransitionName(holder.sharedImage, item)
+
+        holder.rootView.setOnClickListener {
+            Timber.i("tapped on $item")
+            clickListener.onItemSelected(item)
+        }
     }
 
     fun adapterPositionForItem(value: String): Int {
