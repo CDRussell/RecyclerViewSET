@@ -10,13 +10,21 @@
         android:id="@+id/activityToRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Detail to List" />
+        android:text="(Activity) Detail to List" />
+
+    <Button
+        android:id="@+id/fragmentToRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(Fragment) Detail to List" />
 
     <Button
         android:id="@+id/listToDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="List to Detail" />
+
+
 
 
 </LinearLayout>

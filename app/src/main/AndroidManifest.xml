@@ -18,6 +18,9 @@
         <activity android:name=".activity_to_activity_detail_to_list.DetailToList1RecyclerViewActivity" />
         <activity android:name=".activity_to_activity_detail_to_list.DetailToList2RecyclerViewActivity" />
 
+        <activity android:name=".com.cdrussell.recyclerviewtransition.fragment_to_activity_detail_to_list.FragmentDetailToList1RecyclerViewActivity" />
+        <activity android:name=".com.cdrussell.recyclerviewtransition.fragment_to_activity_detail_to_list.FragmentDetailToList2RecyclerViewActivity" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
