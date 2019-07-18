@@ -6,11 +6,12 @@ import android.transition.TransitionInflater
 import android.transition.TransitionSet
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.cdrussell.recyclerviewtransition.R
 import com.cdrussell.recyclerviewtransition.same_activity.InlineDetailFragment
 import com.cdrussell.recyclerviewtransition.same_activity.InlineTabSwitcher
 import com.cdrussell.recyclerviewtransition.same_activity.SampleAdapter
-import timber.log.Timber
+import com.cdrussell.recyclerviewtransition.same_activity.SampleAdapter.Companion.items
 
 
 class SameActivity : AppCompatActivity(), InlineDetailFragment.TabLaunchClickListener, InlineTabSwitcher.InlineTabSwitcherListener {
@@ -21,7 +22,7 @@ class SameActivity : AppCompatActivity(), InlineDetailFragment.TabLaunchClickLis
         super.onCreate(savedInstanceState)
         setContentView(R.layout.same_activity_layout)
 
-        switchTab("a")
+        switchTab(items.first())
     }
 
     private fun switchTab(value: String?, viewHolder: SampleAdapter.ViewHolder? = null) {
@@ -33,16 +34,8 @@ class SameActivity : AppCompatActivity(), InlineDetailFragment.TabLaunchClickLis
         val tx = fm.beginTransaction()
         tx.setReorderingAllowed(true)
         tx.replace(R.id.fragmentContainer, newFragment)
-        //tx.addToBackStack(null)
 
-        //  exit for previous fragment
-        existingFragment?.exitTransition = exitFadeTransition()
-
-        // shared element transitions
-        newFragment.sharedElementEnterTransition = sharedElementTransition()
-
-        // entrance for new fragment
-        newFragment.enterTransition = entranceFadeTransition()
+        applyTransitions(existingFragment, newFragment)
 
         if (existingFragment is InlineTabSwitcher && viewHolder != null) {
             viewHolder.sharedImage.transitionName = "image"
@@ -54,15 +47,7 @@ class SameActivity : AppCompatActivity(), InlineDetailFragment.TabLaunchClickLis
         currentTab = value
     }
 
-    private fun showTabSwitcher() {
-        val fm = supportFragmentManager
-        val newFragment = InlineTabSwitcher.newInstance(currentTab)
-        val existingFragment = fm.findFragmentById(R.id.fragmentContainer)
-        val tx = fm.beginTransaction()
-        tx.setReorderingAllowed(true)
-        tx.replace(R.id.fragmentContainer, newFragment)
-        //tx.addToBackStack(null)
-
+    private fun applyTransitions(existingFragment: Fragment?, newFragment: Fragment) {
         //  exit for previous fragment
         existingFragment?.exitTransition = exitFadeTransition()
 
@@ -71,6 +56,17 @@ class SameActivity : AppCompatActivity(), InlineDetailFragment.TabLaunchClickLis
 
         // entrance for new fragment
         newFragment.enterTransition = entranceFadeTransition()
+    }
+
+    private fun showTabSwitcher() {
+        val fm = supportFragmentManager
+        val newFragment = InlineTabSwitcher.newInstance(currentTab)
+        val existingFragment = fm.findFragmentById(R.id.fragmentContainer)
+        val tx = fm.beginTransaction()
+        tx.setReorderingAllowed(true)
+        tx.replace(R.id.fragmentContainer, newFragment)
+
+       applyTransitions(existingFragment, newFragment)
 
         if (existingFragment is InlineDetailFragment) {
             existingFragment.rootView?.findViewById<ImageView>(R.id.sharedImage)?.let {
@@ -86,11 +82,7 @@ class SameActivity : AppCompatActivity(), InlineDetailFragment.TabLaunchClickLis
 
     override fun onBackPressed() {
         when (supportFragmentManager.findFragmentById(R.id.fragmentContainer)) {
-            is InlineDetailFragment -> {
-                Timber.i("Currently in browser view")
-            }
             is InlineTabSwitcher -> {
-                Timber.i("Currently in tab switcher view")
                 switchTab(currentTab)
             }
             else -> super.onBackPressed()
@@ -118,10 +110,6 @@ class SameActivity : AppCompatActivity(), InlineDetailFragment.TabLaunchClickLis
         }
     }
 
-//    override fun onSelectedTab(value: String?) {
-//        switchTab(value)
-//    }
-
     override fun launchTabSelection() {
         showTabSwitcher()
     }
@@ -131,8 +119,8 @@ class SameActivity : AppCompatActivity(), InlineDetailFragment.TabLaunchClickLis
     }
 
     companion object {
-        private const val MOVE_DEFAULT_TIME: Long = 500
-        private const val FADE_DEFAULT_TIME: Long = 300
+        private const val MOVE_DEFAULT_TIME: Long = 300
+        private const val FADE_DEFAULT_TIME: Long = 200
     }
 }
 

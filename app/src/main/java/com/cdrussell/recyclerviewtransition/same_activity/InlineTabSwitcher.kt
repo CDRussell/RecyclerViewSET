@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cdrussell.recyclerviewtransition.R
 import timber.log.Timber
@@ -40,12 +41,14 @@ class InlineTabSwitcher : Fragment() {
                     listener?.onTabSelected(value, viewHolder)
                 }
             })
+
+            it.layoutManager = GridLayoutManager(requireActivity(), 2)
             it.adapter = adapter
 
             val index = adapter.adapterPositionForItem(arguments?.getString("selected"))
             it.layoutManager?.scrollToPosition(index)
 
-            it.doOnPreDraw { recycler ->
+            it.doOnPreDraw { _ ->
 
                 Timber.i("onPreDraw... triggering animation")
                 startPostponedEnterTransition()
@@ -111,6 +114,6 @@ class SampleAdapter(private val tabSwitcherListener: InlineTabSwitcher.InlineTab
     }
 
     companion object {
-        val items = listOf("a", "b", "c", "d", "e", "f", "g")
+        val items = 1.rangeTo(26).map { it.toString() }
     }
 }
