@@ -24,6 +24,12 @@
         android:layout_height="wrap_content"
         android:text="List to Detail" />
 
+    <Button
+        android:id="@+id/sameActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Same Activity" />
+
 
 
 

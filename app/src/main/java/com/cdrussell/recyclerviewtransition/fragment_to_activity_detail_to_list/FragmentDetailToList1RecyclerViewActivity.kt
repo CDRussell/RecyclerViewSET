@@ -1,6 +1,5 @@
 package com.cdrussell.recyclerviewtransition.com.cdrussell.recyclerviewtransition.fragment_to_activity_detail_to_list
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.cdrussell.recyclerviewtransition.R
@@ -23,18 +22,12 @@ class FragmentDetailToList1RecyclerViewActivity : AppCompatActivity(), DetailFra
         val tx = fm.beginTransaction()
         tx.replace(R.id.fragmentContainer, fragment)
         tx.commit()
+
+        //startPostponedEnterTransition()
     }
 
     override fun onClick(value: String?) {
         switchFragment(value)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            100 -> {
-                switchFragment(data?.getStringExtra("selected"))
-            }
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
 }

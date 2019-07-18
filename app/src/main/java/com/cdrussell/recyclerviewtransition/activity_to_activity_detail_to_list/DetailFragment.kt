@@ -35,9 +35,6 @@ class DetailFragment : Fragment() {
             val intent = Intent(activity, clazz)
             intent.putExtra("selected", element)
             startActivityForResult(intent, 100, options.toBundle())
-
-//            val listener = activity as ClickListener
-//            listener.onClick(FragmentDetailToList2RecyclerViewActivity.items.random())
         }
 
         root.findViewById<TextView>(R.id.title).text = arguments?.getString("selected")

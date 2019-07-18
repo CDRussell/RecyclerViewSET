@@ -4,31 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity_to_activity_detail_to_list.DetailFragment">
+    tools:context=".activity_to_activity_list_to_detail.ListToDetail1RecyclerViewActivity">
 
-    <ImageView
-        android:id="@+id/sharedImage"
+
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:importantForAccessibility="no"
-        android:src="@drawable/ic_filter_b_and_w_black_24dp"
-        android:transitionName="image"
+        android:background="#3F0F"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintHeight_percent=".9"
         app:layout_constraintTop_toTopOf="parent" />
-
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sharedImage"
-        tools:text="title" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
